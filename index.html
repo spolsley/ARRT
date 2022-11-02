@@ -1,0 +1,125 @@
+<html>
+<head>
+<title>Ambrosia Registration Renewal Tool - Cythera Guides</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script>
+	const v1early = ['Maelstrom','Chiral','Apeiron','Swoop','Barrack','Escape Velocity','Avara','Bubble Trouble','Harry'];
+	const v1late = ['Mars Rising','EV Override','Slithereens','Cythera','Ares'];
+	function readAlgo() {
+		if (document.getElementById('v1earlyalg').checked) {
+			return "v1earlyalg";
+		} else if (document.getElementById('v1latealg').checked) {
+			return "v1latealg";
+		} else {
+			return "v2alg";
+		}
+	}
+	function writeAlgo(str) {
+		document.getElementById('v1earlyalg').checked = false;
+		document.getElementById('v1latealg').checked = false;
+		document.getElementById('v2alg').checked = false;
+		
+		document.getElementById(str).checked = true;
+	}
+	function toggleDebug() {
+		if (document.getElementById('debug').checked) {
+			document.getElementById('options').style.display="block";
+		} else {
+			document.getElementById('options').style.display="none";
+		}
+		update(document.getElementById('product').value);
+	}
+	function toggleV2Code() {
+		if (document.getElementById('v2alg').checked) { // show code input
+			document.getElementById('v2code').style.display="block";
+			document.getElementById('submit').value = "Renew Code";
+		} else { // v1 variant
+			document.getElementById('v2code').style.display="none";
+			document.getElementById('submit').value = "Generate Code";
+		}
+	}
+	function update(product) {
+		if (v1early.includes(product)) {
+			writeAlgo("v1earlyalg");
+		} else if (v1late.includes(product)) {
+			writeAlgo("v1latealg");
+		} else { // everything else is v2
+			writeAlgo("v2alg");
+		}
+		toggleV2Code();
+		document.getElementById('productname').value = product;
+	}
+	function selectProduct() {
+		var selected = window.location.hash ? window.location.hash.replace('#','').replaceAll("%20"," ") : "EV Nova";
+		document.getElementById('product').value = selected;
+		update(document.getElementById('product').value);
+	}
+</script>
+<script src="bits.js"></script>
+<script src="renew.js"></script>
+</head>
+<body onload="selectProduct()">
+<h1 style="font-size: 180%;">Ambrosia Registration Renewal Tool</h1>
+<hr>
+<label for="product">Select the product:</label>
+<select id="product" name="product" onchange="update(this.value)">
+	<optgroup label="Renew">
+		<option value="Aki">Aki</option>
+		<option value="Coldstone">Coldstone</option>
+		<option value="Deimos Rising">Deimos Rising</option>
+		<option value="El Ballo">El Ballo</option>
+		<option value="EV Nova">Escape Velocity: Nova</option>
+		<option value="Gooball">Gooball</option>
+		<option value="Garendall">Pillars of Garendall</option>
+		<option value="pop-pop">Pop-Pop</option>
+		<option value="Redline">Redline</option>
+		<option value="Snapz Pro X">Snapz Pro X</option>
+	</optgroup>
+	<optgroup label="Generate">
+		<option value="Apeiron">Apeiron</option>
+		<option value="Ares">Ares</option>
+		<option value="Avara">Avara</option>
+		<option value="Barrack">Barrack</option>
+		<option value="Bubble Trouble">Bubble Trouble</option>
+		<option value="Chiral">Chiral</option>
+		<option value="Cythera">Cythera</option>
+		<option value="Escape Velocity">Escape Velocity</option>
+		<option value="EV Override">Escape Velocity: Override</option>
+		<option value="Harry">Harry the Handsome Executive</option>
+		<option value="Maelstrom">Maelstrom</option>
+		<option value="Mars Rising">Mars Rising</option>
+		<option value="Slithereens">Slithereens</option>
+		<option value="Swoop">Swoop</option>
+	</optgroup>
+</select>&nbsp;&nbsp;&nbsp;&nbsp;<a href="about.html" style="font-size:small;">About this page</a><br>
+<input type="checkbox" id="debug" name="debug" value="debug" onchange="toggleDebug()">
+<label for="debug">Enable Debug Options</label>
+<div id="options" style="display:none">
+	<label for="productname">Product Name:</label>
+	<input type="text" id="productname" name="productname"><br>
+	<label for="decadeoffset">Decade Offset:</label>
+	<input type="text" id="decadeoffset" name="decadeoffset" value="0"><br>
+	Algorithm:&nbsp;
+	<input type="radio" id="v1earlyalg" name="algorithm" value="v1earlyalg" onchange="toggleV2Code()">
+	<label for="v1earlyalg">V1 Early</label>&nbsp;&nbsp;&nbsp;
+	<input type="radio" id="v1latealg" name="algorithm" value="v1latealg" onchange="toggleV2Code()">
+	<label for="v1latealg">V1 Late</label>&nbsp;&nbsp;&nbsp;
+	<input type="radio" id="v2alg" name="algorithm" value="v2alg" onchange="toggleV2Code()">
+	<label for="v2alg">V2</label>
+</div>
+<br><br>
+<form name="aswcode" action="javascript:handleASWCode()">
+	<label for="name">Name:</label><br>
+	<input type="text" id="name" name="name"><br>
+	<label for="copies">Copies:</label><br>
+	<input type="text" id="copies" name="copies"></br>
+	<div id="v2code" style="display:block;">
+		<label for="code">Existing Code:</label><br>
+		<input type="text" id="code" name="code"><br>
+	</div><br>
+	<input type="submit" id="submit" name="submit" value="Renew Code"/>
+</form>
+<p id="result"></p>
+<br>
+<p id="info"></p>
+</body>
